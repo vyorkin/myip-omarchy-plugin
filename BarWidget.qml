@@ -506,9 +506,9 @@ BarWidget {
   }
 
   // Reserve the natural width of the composed label so the bar slot matches
-  // the visible content (icon + name + value + optional flag).
-  implicitWidth: iconImage.width + Style.space(6) + nameText.implicitWidth
-    + Style.space(6) + valueText.implicitWidth
+  // the visible content (value + optional flag). Local patch: the icon and the
+  // "MyIP" name were removed from the bar label on purpose.
+  implicitWidth: valueText.implicitWidth
     + (flagTextItem.visible ? Style.space(5) + flagTextItem.implicitWidth : 0)
     + Style.space(16)
   implicitHeight: root.barSize
@@ -709,35 +709,12 @@ BarWidget {
       NumberAnimation { duration: 160; easing.type: Easing.OutCubic }
     }
 
-    Image {
-      id: iconImage
-      anchors.left: parent.left
-      anchors.verticalCenter: parent.verticalCenter
-      width: 16
-      height: 16
-      source: Qt.resolvedUrl("assets/icon.png")
-      sourceSize.width: 128
-      sourceSize.height: 128
-      fillMode: Image.PreserveAspectFit
-      smooth: true
-    }
-
-    Text {
-      id: nameText
-      anchors.left: iconImage.right
-      anchors.leftMargin: Style.space(6)
-      anchors.verticalCenter: parent.verticalCenter
-      text: "MyIP"
-      color: root.configAttention ? root.warn : root.dim
-      font.family: root.fontFamily
-      font.pixelSize: Style.font.body
-      verticalAlignment: Text.AlignVCenter
-    }
-
+    // Local patch: no icon and no "MyIP" name here — the bar shows only the
+    // address and the country flag. The icon still ships in assets/ for the
+    // panel and the marketplace listing.
     Text {
       id: valueText
-      anchors.left: nameText.right
-      anchors.leftMargin: Style.space(6)
+      anchors.left: parent.left
       anchors.verticalCenter: parent.verticalCenter
       text: root.valueText
       color: root.hasOk ? root.foreground : root.dim
